@@ -1,0 +1,21 @@
+#content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#content table {
+    border: solid 1px black;
+}
+
+th {
+    cursor: pointer;
+}
+
+th.asc::after {
+    content: " ▲";
+}
+
+th.desc::after {
+    content: " ▼";
+}
