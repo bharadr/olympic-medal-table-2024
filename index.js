@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (!badRow) {
                 rows.push(row);
             }
-            console.log(row);
         });
         const tableBody = document.querySelector('#medal-table tbody');
 
@@ -112,7 +111,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         rows.forEach(row => {
             const tr = document.createElement('tr');
             headers.forEach(header => {
-                console.log(header);
                 const td = document.createElement('td');
                 td.textContent = row[header];
                 tr.appendChild(td);
