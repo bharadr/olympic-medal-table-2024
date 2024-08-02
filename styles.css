@@ -6,6 +6,7 @@
 
 #content table {
     border: solid 1px black;
+
 }
 
 th {
@@ -17,5 +18,41 @@ th.asc::after {
 }
 
 th.desc::after {
+    content: " ▼";
+}
+
+#medal-table {
+    border-collapse: collapse;
+    width: 50%;
+}
+
+#medal-table th, #medal-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+#medal-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#medal-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+#medal-table tbody tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+#medal-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+#medal-table th.asc::after {
+    content: " ▲";
+}
+
+#medal-table th.desc::after {
     content: " ▼";
 }
