@@ -55,12 +55,19 @@ function makeTableSortable(tableId) {
     updateRanks(Array.from(table.querySelectorAll('tbody tr')), true);
 }
 
+
+
 document.addEventListener('DOMContentLoaded', async () => {
-    const endpointUrl = 'http://localhost:3000/api/scrape'
+    const endpointUrl = 'https://olympic-scraping-server.vercel.app/api/scrape'
     let rows = [];
     try {
         // Fetch data from the URL
-        const response = await fetch(endpointUrl);
+        const response = await fetch(endpointUrl, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
 
         // Check if the response is ok (status code 200-299)
         if (!response.ok) {
@@ -76,12 +83,16 @@ document.addEventListener('DOMContentLoaded', async () => {
     const headers =  ['Rank', 'Country', 'Gold', 'Silver', 'Bronze', 'Total', 'Score'];
     const tableBody = document.querySelector('#medal-table tbody');
 
+    const contestantNations = ['Poland', 'Nigeria', 'Italy', 'New Zealand', 'Switzerland', 'South Africa', 'China', 'France', 'Thailand', 'United States', 'Afghanistan', 'Ethiopia'];
     // Append rows
     rows.forEach(row => {
         const tr = document.createElement('tr');
         headers.forEach(header => {
             const td = document.createElement('td');
             td.textContent = row[header.toLowerCase()];
+            if (header === "Country" && contestantNations.includes(row[header.toLowerCase()])) {
+                td.style.backgroundColor = "rgb(122, 156, 210)";
+            }
             tr.appendChild(td);
         });
         tableBody.appendChild(tr);
