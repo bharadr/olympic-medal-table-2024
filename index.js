@@ -56,71 +56,36 @@ function makeTableSortable(tableId) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const url = 'https://cors-anywhere.herokuapp.com/https://en.wikipedia.org/wiki/2024_Summer_Olympics_medal_table';
-    
-    // Fetch the page content
+    const endpointUrl = 'http://localhost:3000/api/scrape'
+    let rows = [];
     try {
-        const response = await fetch(url);
-        const html = await response.text();
-        
-        // Parse the HTML
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        
-        // Find the table with the title "2024 Summer Olympics medal table"
-        const table = doc.querySelector('table.wikitable');
-        const headers =  ['Rank', 'Country', 'Gold', 'Silver', 'Bronze', 'Total', 'Score'];
-        const rows = [];
-        // Extract table rows
-        table.querySelectorAll('tbody tr').forEach((element, index) => {
-            const row = {};
-            if (index === 0) {
-                return;
-            }
-            let foundFirstTh = false;
-            let headerIdx = 1;
-            let badRow = false;
-            element.querySelectorAll('td, th').forEach((el) => {
-                if (el.tagName.toLowerCase() === 'th') {
-                    foundFirstTh = true;
-                }
-                if (foundFirstTh) {
-                    let value = el.textContent.trim();
-                    if (headerIdx === 1) {
-                        if (value.includes('Totals')) {
-                            badRow = true;
-                        } else if (value.includes('France')) {
-                            value = 'France';
-                        }
-                    }
-                    if (!isNaN(value)) {
-                        value = Number(value);
-                    }
-                    row[headers[headerIdx]] = value;
-                    headerIdx += 1;
-                }
-            });
-            row['Score'] = 3 * Number(row['Gold']) + 2 * Number(row['Silver']) + 1 * Number(row['Bronze']);
-            if (!badRow) {
-                rows.push(row);
-            }
-        });
-        const tableBody = document.querySelector('#medal-table tbody');
+        // Fetch data from the URL
+        const response = await fetch(endpointUrl);
 
-        // Append rows
-        rows.forEach(row => {
-            const tr = document.createElement('tr');
-            headers.forEach(header => {
-                const td = document.createElement('td');
-                td.textContent = row[header];
-                tr.appendChild(td);
-            });
-            tableBody.appendChild(tr);
-        });
-        // Call this function after populating your table
-        makeTableSortable('medal-table');
+        // Check if the response is ok (status code 200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        // Decode the JSON response
+        resp = await response.json();
+        rows = resp['data'];
     } catch (error) {
-        console.error('Error fetching the page:', error);
+        console.log(error);
     }
 
+    const headers =  ['Rank', 'Country', 'Gold', 'Silver', 'Bronze', 'Total', 'Score'];
+    const tableBody = document.querySelector('#medal-table tbody');
+
+    // Append rows
+    rows.forEach(row => {
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+            const td = document.createElement('td');
+            td.textContent = row[header.toLowerCase()];
+            tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+    });
+    // Call this function after populating your table
+    makeTableSortable('medal-table');
 });
