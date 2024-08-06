@@ -60,6 +60,10 @@ function makeTableSortable(tableId) {
 document.addEventListener('DOMContentLoaded', async () => {
     const endpointUrl = 'https://olympic-scraping-server.vercel.app/api/scrape'
     let rows = [];
+    const loadingElement = document.getElementById('loading');
+    // Show the loading icon
+    loadingElement.classList.remove('hidden');
+
     try {
         // Fetch data from the URL
         const response = await fetch(endpointUrl, { 
@@ -78,6 +82,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         rows = resp['data'];
     } catch (error) {
         console.log(error);
+    } finally  {
+        // Hide the loading icon
+        loadingElement.classList.add('hidden');
     }
 
     const headers =  ['Rank', 'Country', 'Gold', 'Silver', 'Bronze', 'Total', 'Score'];
