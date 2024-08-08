@@ -24,6 +24,14 @@ th.desc::after {
 #medal-table {
     border-collapse: collapse;
     width: 50%;
+    font-size: 3vw;
+}
+
+/* Media query for desktop devices */
+@media (min-width: 768px) {
+    #medal-table {
+        font-size: 1vw;
+    }
 }
 
 #medal-table th, #medal-table td {
